@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const { euclidianDistance } = require('./helpers')
+const { euclidianDistances } = require('./helpers')
 
 const schema = Joi.object()
 	.keys({
@@ -19,7 +19,7 @@ const geoDistance = async (req, res) => {
 		})
 	}
 
-	const distance = euclidianDistance(body)
+	const distance = await euclidianDistances(body)
 
 	return res.json(distance)
 }
