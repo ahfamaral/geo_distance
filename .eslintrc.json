@@ -11,6 +11,8 @@
         "ecmaVersion": 11
     },
     "rules": {
-        "semi": [2, "never"]
+        "semi": [2, "never"],
+        "indent": [2, "tab"],
+        "no-tabs": 0
     }
 }
