@@ -6,7 +6,7 @@ const apiKey = process.env.GEOCODING_API_KEY
 
 const url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
 
-const requestGoogleApi = async (reqs) => axios.all(reqs)
+const requestGoogleApi = (reqs) => axios.all(reqs)
 	.then((res) => res)
 	.catch((e) => e.response.data)
 
@@ -20,7 +20,8 @@ const calculateEuclidianDistances = (x, y) => {
 	const theta = x.lng - y.lng
 	const radtheta = (Math.PI * theta) / 180
 
-	let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta)
+	let dist = Math.sin(radlat1) * Math.sin(radlat2)
+		+ Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta)
 
 	if (dist > 1) {
 		dist = 1
@@ -33,6 +34,41 @@ const calculateEuclidianDistances = (x, y) => {
 	dist *= 1.609344
 
 	return dist.toFixed(2)
+}
+
+const closestAndFurthest = (sortedDistances) => {
+	console.log('Calculating closest and furthest addresses ...')
+	const closestAddresses = {
+		from: '',
+		to: '',
+		distance_km: sortedDistances[0].to[0].distance_km,
+	}
+	const furthestAddresses = {
+		from: '',
+		to: '',
+		distance_km: sortedDistances[0].to[0].distance_km,
+	}
+
+	sortedDistances.forEach((addressRelation) => {
+		addressRelation.to.forEach((destiny) => {
+			if (furthestAddresses.distance_km < parseFloat(destiny.distance_km)) {
+				furthestAddresses.distance_km = destiny.distance_km
+				furthestAddresses.from = addressRelation.from
+				furthestAddresses.to = destiny.address
+			}
+
+			if (closestAddresses.distance_km > parseFloat(destiny.distance_km)) {
+				closestAddresses.distance_km = destiny.distance_km
+				closestAddresses.from = addressRelation.from
+				closestAddresses.to = destiny.address
+			}
+		})
+	})
+
+	return {
+		closest: closestAddresses,
+		furthest: furthestAddresses,
+	}
 }
 
 const euclidianDistancesProcess = async (addressList) => {
@@ -94,9 +130,18 @@ const euclidianDistancesProcess = async (addressList) => {
 		})
 	})
 
+	const {
+		closest,
+		furthest,
+	} = closestAndFurthest(addressesDistances)
+
 	console.log('Returning sorted distances ...')
 
-	return addressesDistances
+	return {
+		closest,
+		furthest,
+		relations_list: addressesDistances,
+	}
 }
 
 module.exports = {
