@@ -81,12 +81,12 @@ const euclidianDistancesProcess = async (addressList) => {
 				)
 				distances.push({
 					address: validAddresses[i].address,
-					distance: euclidianDistance,
+					distance_km: euclidianDistance,
 				})
 			}
 		}
 
-		distances.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
+		distances.sort((a, b) => parseFloat(a.distance_km) - parseFloat(b.distance_km))
 
 		addressesDistances.push({
 			from: referenceAddress.address,
