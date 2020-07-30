@@ -2,8 +2,8 @@
 API Rest para cálculo de distância euclidiana utilizando Geocoding API do google
 
 ## Set .env GEOCODING_API_KEY variable
-In order to interact with google [Geocoding API] **GEOCODING_API_KEY** with your own API_KEY
-(https://developers.google.com/maps/documentation/geocoding/start)
+In order to interact with google [Geocoding API](https://developers.google.com/maps/documentation/geocoding/start) set the **.env** variable **GEOCODING_API_KEY** with your own API_KEY
+
 
 ## Usage
 Docker or NPM commands
