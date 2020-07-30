@@ -8,6 +8,7 @@ const schema = Joi.object()
 	})
 
 const geoDistance = async (req, res) => {
+	console.log('[START] Initiating Geodistance Process ...')
 	const { body } = req
 
 	console.log('Validating inputs ...')
@@ -22,7 +23,7 @@ const geoDistance = async (req, res) => {
 
 	const sortedDistances = await euclidianDistancesProcess(body.addresses)
 
-	console.log('Responding to the API request ...')
+	console.log('[FINISH] Responding request ...')
 	return res.json(sortedDistances)
 }
 

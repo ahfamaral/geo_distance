@@ -135,7 +135,7 @@ const euclidianDistancesProcess = async (addressList) => {
 		furthest,
 	} = closestAndFurthest(addressesDistances)
 
-	console.log('Returning sorted distances ...')
+	console.log('Returning all calculated distance relations ...')
 
 	return {
 		closest,
