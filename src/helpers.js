@@ -8,7 +8,11 @@ const url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
 
 const requestGoogleApi = (reqs) => axios.all(reqs)
 	.then((res) => res)
-	.catch((e) => e.response.data)
+	.catch((e) => {
+		throw new Error(
+			`Unexpected Error when dealing with Geocoding Google Api requests: ${e}`,
+		)
+	})
 
 const calculateEuclidianDistances = (x, y) => {
 	if ((x.lat === y.lat) && (x.lng === y.lng)) {
@@ -84,17 +88,16 @@ const euclidianDistancesProcess = async (addressList) => {
 	console.log('Requesting google Geocoding Api ...')
 	const googleResponse = await requestGoogleApi(requestArray)
 
-	if (googleResponse.error_message) {
-		console.log('[ERROR]: ', googleResponse.error_message)
-		return googleResponse.error_message
-	}
-
 	console.log('Removing not found addresses ...')
-	const foundCoordinates = googleResponse.map((el) => {
-		if (el.data.results.length) {
+	const foundCoordinates = googleResponse.map((res) => {
+		if (res.data.error_message) {
+			throw new Error(res.data.error_message)
+		}
+
+		if (res.data.results.length) {
 			return {
-				coordinates: el.data.results[0].geometry.location,
-				address: el.data.results[0].formatted_address,
+				coordinates: res.data.results[0].geometry.location,
+				address: res.data.results[0].formatted_address,
 			}
 		}
 

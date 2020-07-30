@@ -29,7 +29,7 @@ const geoDistance = async (req, res) => {
 	} catch (error) {
 		console.log('[ERROR]', error.message)
 		return res.status(500).json({
-			message: error.message,
+			error_message: error.message,
 		})
 	}
 }
