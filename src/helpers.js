@@ -41,23 +41,23 @@ const closestAndFurthest = (sortedDistances) => {
 	const closestAddresses = {
 		from: '',
 		to: '',
-		distance_km: sortedDistances[0].to[0].distance_km,
+		distance_km: parseFloat(sortedDistances[0].to[0].distance_km),
 	}
 	const furthestAddresses = {
 		from: '',
 		to: '',
-		distance_km: sortedDistances[0].to[0].distance_km,
+		distance_km: parseFloat(sortedDistances[0].to[0].distance_km),
 	}
 
 	sortedDistances.forEach((addressRelation) => {
 		addressRelation.to.forEach((destiny) => {
-			if (furthestAddresses.distance_km < parseFloat(destiny.distance_km)) {
+			if (furthestAddresses.distance_km <= parseFloat(destiny.distance_km)) {
 				furthestAddresses.distance_km = destiny.distance_km
 				furthestAddresses.from = addressRelation.from
 				furthestAddresses.to = destiny.address
 			}
 
-			if (closestAddresses.distance_km > parseFloat(destiny.distance_km)) {
+			if (closestAddresses.distance_km >= parseFloat(destiny.distance_km)) {
 				closestAddresses.distance_km = destiny.distance_km
 				closestAddresses.from = addressRelation.from
 				closestAddresses.to = destiny.address
@@ -102,6 +102,10 @@ const euclidianDistancesProcess = async (addressList) => {
 	})
 
 	const validAddresses = foundCoordinates.filter((el) => el !== undefined)
+
+	if (validAddresses.length < 2) {
+		throw new Error('Could not find at least two addresses')
+	}
 
 	const addressesDistances = []
 

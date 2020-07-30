@@ -21,10 +21,17 @@ const geoDistance = async (req, res) => {
 		})
 	}
 
-	const sortedDistances = await euclidianDistancesProcess(body.addresses)
+	try {
+		const sortedDistances = await euclidianDistancesProcess(body.addresses)
 
-	console.log('[FINISH] Responding request ...')
-	return res.json(sortedDistances)
+		console.log('[FINISH] Responding request ...')
+		return res.json(sortedDistances)
+	} catch (error) {
+		console.log('[ERROR]', error.message)
+		return res.status(500).json({
+			message: error.message,
+		})
+	}
 }
 
 module.exports = {
