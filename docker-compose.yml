@@ -8,6 +8,6 @@ services:
     container_name: geo_distance_api_1
     volumes:
       - ./:/app
-      - ./node_modules:/app/node_modules
+      - ./app/node_modules
     ports:
       - "3000:3000"
